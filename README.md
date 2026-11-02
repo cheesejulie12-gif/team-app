@@ -1,39 +1,13 @@
-# 팀 편성 앱
-
-학생이 팀에 지원하고 팀원이 투표해 팀을 만들고, 마감 뒤 남은 학생을 AI(오픈라우터)로 배정하는 Streamlit 앱.
-
-## 파일
-
-| 파일 | 하는 일 |
-|---|---|
-| `streamlit_app.py` | 화면 (로그인, 학생 화면, 관리자 화면) |
-| `logic.py` | 규칙 검사, 배정안 검사 다섯 가지, 앱 자체 배정(모든 경우 탐색) |
-| `db.py` | DB 질의 (연결 풀로 연결을 다시 씀), 비밀번호 해시, 명단 CSV 읽기 |
-| `ai.py` | 오픈라우터 1차→2차→3차 모델 호출 (모델마다 전체 120초 제한) |
-| `schema.sql` | `tf_` 테이블을 만드는 SQL (앱이 시작할 때도 자동으로 실행함) |
-| `.github/workflows/db-keepalive.yml` | 매일 DB에 질의를 보내 일시정지를 막음 |
-| `sample_roster.csv` | 시험용 명단 |
-
-## 내 컴퓨터에서 실행
-
-```bash
-pip install -r requirements.txt
-cp .env.example .env      # 이름이 정확히 .env 인지 확인 (.env.txt 아님)
-# .env 를 편집기로 열어 세 값을 채움
-streamlit run streamlit_app.py
-```
-
-관리자는 학번 `admin`, 비밀번호는 `.env`의 `ADMIN_PASSWORD`. 학생 비밀번호는 모두 `1234`.
-
-## 고른 해결 (3장)
-
-| 기능 | 해결 |
-|---|---|
-| 다른 사람의 변경 보기 | 어려운 해결: `st.fragment(run_every=3)`로 3초마다 자동으로 다시 그림 (새로 고침 단추 없음) |
-| 필수 포함 역할을 지킬 수 없는 팀 | 어려운 해결: 지원 단계에서 자리가 모자라게 되는 지원을 막음 |
-| 같은 팀에 대기 중인 지원이 여럿 | 어려운 해결: 승인 직전 규칙을 다시 검사함 |
-| 마지막 자리에 두 명이 동시에 | 어려운 해결: `tf_members`의 기본 키와 유일성 제약 |
-| AI 응답이 늦을 때 | 어려운 해결: 모델마다 전체 120초를 재서 끊고 다음 모델로 |
-| 3차 모델까지 실패 | 어려운 해결: 앱이 모든 경우를 따져 검사 다섯 가지를 통과하는 배정을 찾음 |
-| AI 대기 중 화면 | 어려운 해결: 몇 차 모델을 기다리는지와 경과 초를 보여 줌 |
-| DB 일시정지 | 어려운 해결: GitHub Actions로 매일 DB에 질의 |
+7.1 README.md 
+1. 배포 주소. 예:[ https://tf-abc123.streamlit.app](https://team-appgit-efyosci4hmdpks5vjiwqyd.streamlit.app/)
+2. PRD와 구현 계획의 위치. docs/PRD.md
+3. 고른 해결 방법: 다른 사람의 변경 보기
+해결( st.fragment 로 5초마다 갱신)"
+4. 쓴 모델 3개의 이름. 예: "1차(openai/gpt-oss-120b:free , 2차meta-llama/llama-3.3-70b-instruct:free, 3차google/gemma-4-31b-it:free"
+  
+5. 오픈라우터 AI 모델 호출 실패 사례 1건 이상과 그 화면. 예: "1차 모델이 120초 안에 응답하지 않아 2차 모델로 넘어감[(화면
+img/ai-timeout.png )", "1차 모델의 배정안에서 팀2에 웹 프로그래머가 없어 앱이 걸러 냄(화면 img/airejected.png )"](https://1drv.ms/i/c/923b8bd7d001e3f5/IQBniHE262P3QKaPneMOIGlyAaBVUi1gRxhis2o05zY8AuU?e=v8C23m)
+6. 과제 해결 과정에서 클로드가 잘못된 추론이나 답변을 한 사례 1건 이상과, 그것을 알아챈 방법:클로드가 만든 투표 코드가 팀원 1명의 찬성만으로 승인했음. 중간 시나리오 6단계를 해 보다 알아챘고, 커밋
+a1b2c3d 에서 고침"
+7. 본인이 제출한 앱에서 발견한 문제점이나 개선 필요 사항 1건 이상과, 그 문제를 발견한 연습용 시나리오의 단계와 화면. "문
+제 없음"은 인정하지 않음. 예: 쉬움 단계에서 ai배정 3차까지 실패함
